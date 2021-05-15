@@ -132,6 +132,26 @@ class _HomePageState extends State<Authentication>  {
                         padding: MaterialStateProperty.all(EdgeInsets.all(12)),
                     ),
                   ),
+
+                  ),
+                SizedBox(height: 28,),
+                Container(
+                  child: Text.rich(
+                    TextSpan(
+                      text:"Don't Have An Account?",
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text:"Sign Up!",
+
+                        )
+
+                      ]
+                  )
+
+
+                  ),
+
+
                 )
               ]
           ),
