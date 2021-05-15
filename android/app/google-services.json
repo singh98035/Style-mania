@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1052015752148",
+    "project_id": "style-mania",
+    "storage_bucket": "style-mania.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052015752148:android:4c211458029917a910dc41",
+        "android_client_info": {
+          "package_name": "com.example.style_mania"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052015752148-jo2gufcf57c3n08l1codf3fv22uh5uh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRvnmqJCuGOyexKnqchfJLr6hiibZHFoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052015752148-jo2gufcf57c3n08l1codf3fv22uh5uh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
