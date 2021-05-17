@@ -23,16 +23,15 @@ class _HomePageState extends State<Signup>  {
     print(">>> Phone: " + phoneController.value.text);
 
     Map<String, dynamic> obj = {
-      "docId": _firestore.collection("info").doc().id,
+      "docId": _firestore.collection("User_Data").doc().id,
       "name": nameController.value.text,
       "email": emailController.value.text,
       "phone": phoneController.value.text,
     };
-    _firestore.collection("info").doc(obj['docId']).set(obj, SetOptions(merge: true))
+    _firestore.collection("User_Data").doc(obj['docId']).set(obj, SetOptions(merge: true))
         .then((value) {
-      print(">>> Values Added Successfully");
       ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
-        content: Text('Values Added Successfully', style: TextStyle(fontSize: 32),),
+        content: Text('Data Added Successfully', style: TextStyle(fontSize: 32),),
         behavior: SnackBarBehavior.floating,
       ));
     });
