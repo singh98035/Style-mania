@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:style_mania/signup.dart';
 class Authentication extends StatefulWidget {
   @override
   _HomePageState  createState() => _HomePageState();
@@ -10,28 +13,32 @@ class Authentication extends StatefulWidget {
 class _HomePageState extends State<Authentication>  {
   GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool visible = false;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  saveValuesToFirebase() {
-    print(">>> Email: " + emailController.value.text);
-
-    Map<String, dynamic> obj = {
-      "docId": _firestore.collection("info").doc().id,
-      "email": emailController.value.text
-    };
-    _firestore.collection("info").doc(obj['docId']).set(obj, SetOptions(merge: true))
-        .then((value) {
-      print(">>> Values Added Successfully");
+  signInUser() {
+    _auth.signInWithEmailAndPassword(email: emailController.value.text, password: passwordController.value.text)
+        .then((value) async {
+      var userObj = (await _firestore.collection("info").where("authId", isEqualTo: value.user.uid).get()).docs.first.data();
+      print(">>> User Obj: " + userObj.toString());
       ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
-        content: Text('Values Added Successfully', style: TextStyle(fontSize: 32),),
+        content: Text('User Signed In Successfully'),
         behavior: SnackBarBehavior.floating,
       ));
+    })
+        .catchError((error) {
+      ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
+        content: Text(error.message),
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 6),
+      ));
     });
-}
+  }
+
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -117,7 +124,7 @@ class _HomePageState extends State<Authentication>  {
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: saveValuesToFirebase,
+                    onPressed: signInUser,
                     child: Text(
                       'LOGIN',
                       style: TextStyle(
@@ -135,24 +142,40 @@ class _HomePageState extends State<Authentication>  {
 
                   ),
                 SizedBox(height: 28,),
-                Container(
-                  child: Text.rich(
-                    TextSpan(
-                      text:"Don't Have An Account?",
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text:"Sign Up!",
+                RichText(
+                       text: TextSpan(
+                         text: "Don't Have An Account? ",
+                         style: TextStyle(
+                             fontSize: 20,
+                             color: Colors.deepPurpleAccent
+                         ),
+                         children: <TextSpan>[
+                           TextSpan(
+                             text: "Sign Up",
+                            style: TextStyle(
+                               fontWeight: FontWeight.w600,
+                               fontSize: 20,
+                               color: Colors.deepPurpleAccent,
 
-                        )
+                             ),
+                             recognizer: TapGestureRecognizer()
+                               ..onTap = () {
+                                 Navigator.of(context).pushReplacement(
+                                     MaterialPageRoute(builder: (context) => Signup(),)
+                                 );
 
-                      ]
+
+
+
+                             }
+                           )
+                         ]
+                       )
                   )
 
 
-                  ),
 
 
-                )
               ]
           ),
       ),

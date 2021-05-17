@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,7 @@ class Signup extends StatefulWidget {
 class _HomePageState extends State<Signup>  {
   GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool visible = false;
   TextEditingController nameController = TextEditingController();
@@ -36,6 +38,9 @@ class _HomePageState extends State<Signup>  {
         behavior: SnackBarBehavior.floating,
       ));
     });
+  }
+  createUserWithEmailPassword() async {
+    return (await _auth.createUserWithEmailAndPassword(email: emailController.value.text, password: passwordController.value.text)).user.uid;
   }
   @override
   Widget build(BuildContext context) {
@@ -125,20 +130,13 @@ class _HomePageState extends State<Signup>  {
                 SizedBox(height: 3,),
                 TextFormField(
                   obscureText: !visible,
-                  controller: passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.lock, size: 22, color: Colors.deepPurpleAccent,),
                       labelStyle: TextStyle(
                           fontSize: 18
                       ),
-                      suffixIcon: IconButton(
-                        icon: !visible ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
-                        onPressed: () {
-                          visible = !visible;
-                        },
-                        tooltip: !visible ? "Show Password" : "Hide Password",
-                      ),
+
                       labelText: 'Confirm Password'
                   ),
                 ),
