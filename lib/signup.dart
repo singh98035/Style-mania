@@ -19,18 +19,21 @@ class _HomePageState extends State<Signup>  {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  saveValuesToFirebase() {
+  saveValuesToFirebase() async {
     print(">>> Name: " + nameController.value.text);
     print(">>> Email: " + emailController.value.text);
     print(">>> Phone: " + phoneController.value.text);
 
     Map<String, dynamic> obj = {
-      "docId": _firestore.collection("info").doc().id,
+      "docId": _firestore.collection("User_data").doc().id,
       "name": nameController.value.text,
       "email": emailController.value.text,
       "phone": phoneController.value.text,
+      "authId": await createUserWithEmailPassword(),
+      "createdOn": FieldValue.serverTimestamp()
     };
-    _firestore.collection("info").doc(obj['docId']).set(obj, SetOptions(merge: true))
+
+    _firestore.collection("User_data").doc(obj['docId']).set(obj, SetOptions(merge: true))
         .then((value) {
       print(">>> Values Added Successfully");
       ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
@@ -38,6 +41,7 @@ class _HomePageState extends State<Signup>  {
         behavior: SnackBarBehavior.floating,
       ));
     });
+
   }
   createUserWithEmailPassword() async {
     return (await _auth.createUserWithEmailAndPassword(email: emailController.value.text, password: passwordController.value.text)).user.uid;
