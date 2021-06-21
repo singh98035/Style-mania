@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:style_mania/homepage.dart';
 import 'SplashScreen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,24 +32,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: const <Widget>[
-            Text(
-                'Style Mania'
-            )
-          ],
-        ),
-
-
-      ),
-    );
-  }
-}

@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:style_mania/signup.dart';
+import 'homepage.dart';
 class Authentication extends StatefulWidget {
   @override
   _HomePageState  createState() => _HomePageState();
@@ -21,22 +22,29 @@ class _HomePageState extends State<Authentication>  {
   TextEditingController passwordController = TextEditingController();
 
   signInUser() {
+    print(emailController.value.text);
+    print(passwordController.value.text);
     _auth.signInWithEmailAndPassword(email: emailController.value.text, password: passwordController.value.text)
         .then((value) async {
-      var userObj = (await _firestore.collection("info").where("authId", isEqualTo: value.user.uid).get()).docs.first.data();
-      print(">>> User Obj: " + userObj.toString());
-      ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
-        content: Text('User Signed In Successfully'),
-        behavior: SnackBarBehavior.floating,
-      ));
-    })
+          print("*******");
+          var userObj = (await _firestore.collection("User_data").where("authId", isEqualTo: value.user.uid).get()).docs.first.data();
+          print(">>> User Obj: " + userObj.toString());
+          ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
+            content: Text('User Signed In Successfully'),
+            behavior: SnackBarBehavior.floating,
+          ));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => MyHomePage(),)
+          );
+        })
         .catchError((error) {
-      ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
-        content: Text(error.message),
-        behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 6),
-      ));
-    });
+          print(">>> " + error.toString());
+          ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(new SnackBar(
+            content: Text(">>>" + error.message),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 6),
+          ));
+        });
   }
 
   @override
@@ -88,7 +96,6 @@ class _HomePageState extends State<Authentication>  {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 8,),
-
                 TextFormField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -139,7 +146,6 @@ class _HomePageState extends State<Authentication>  {
                         padding: MaterialStateProperty.all(EdgeInsets.all(12)),
                     ),
                   ),
-
                   ),
                 SizedBox(height: 28,),
                 RichText(
@@ -156,26 +162,17 @@ class _HomePageState extends State<Authentication>  {
                                fontWeight: FontWeight.w600,
                                fontSize: 20,
                                color: Colors.deepPurpleAccent,
-
                              ),
                              recognizer: TapGestureRecognizer()
                                ..onTap = () {
                                  Navigator.of(context).pushReplacement(
                                      MaterialPageRoute(builder: (context) => Signup(),)
                                  );
-
-
-
-
                              }
                            )
                          ]
                        )
                   )
-
-
-
-
               ]
           ),
       ),
